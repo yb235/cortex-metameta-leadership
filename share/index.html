@@ -53,6 +53,25 @@
     .hud-controls{display:flex;gap:8px}
     .highlight-pulse{outline:3px solid #88bc65 !important;box-shadow:0 0 25px rgba(136,188,101,.48) !important;transform:scale(1.008);transition:all .3s ease}
 
+    
+    /* AR Business Card Scanner Styles */
+    .ar-modal{position:fixed;inset:0;background:rgba(12,28,21,.88);backdrop-filter:blur(14px);z-index:220;display:none;align-items:center;justify-content:center;padding:18px}
+    .ar-modal.show{display:flex}
+    .ar-card{width:min(660px,100%);background:#15362b;border:1px solid rgba(185,239,134,.35);border-radius:18px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.6);color:#fff;display:flex;flex-direction:column}
+    .ar-head{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.12)}
+    .ar-viewport{position:relative;height:310px;background:#091712;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .ar-reticle{position:relative;width:290px;height:180px;border:2px dashed rgba(185,239,134,.45);border-radius:12px;box-shadow:0 0 25px rgba(185,239,134,.15);overflow:hidden;background:rgba(255,255,255,.03);transition:all .3s}
+    .ar-corner{position:absolute;width:14px;height:14px;border-color:#b9ef86;border-style:solid}
+    .ar-c-tl{top:-2px;left:-2px;border-width:3px 0 0 3px}
+    .ar-c-tr{top:-2px;right:-2px;border-width:3px 3px 0 0}
+    .ar-c-bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px}
+    .ar-c-br{bottom:-2px;right:-2px;border-width:0 3px 3px 0}
+    .ar-laser{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#b9ef86,#fff,#b9ef86,transparent);box-shadow:0 0 14px #b9ef86;animation:arScan 2.2s infinite ease-in-out}
+    @keyframes arScan{0%{top:4%;opacity:.3}50%{top:94%;opacity:1}100%{top:4%;opacity:.3}}
+    .ar-card-preview{padding:14px 16px;height:100%;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(ellipse at 80% 20%,#204e3e 0%,#16372d 100%);color:#fff;border-radius:10px}
+    .ar-telemetry{position:absolute;bottom:8px;left:14px;right:14px;display:flex;justify-content:space-between;font:500 10px 'DM Mono',monospace;color:#a4ceb5;background:rgba(0,0,0,.5);padding:5px 9px;border-radius:5px;letter-spacing:.5px}
+    .ar-controls{padding:16px 20px;background:#112a21;display:flex;flex-direction:column;gap:12px}
+
     @media(max-width:1000px){.shell{grid-template-columns:205px 1fr}.content{padding:28px 23px}.topbar{padding:0 23px}.workgrid{grid-template-columns:1fr}.feed{min-height:0}.feedlist{display:grid;grid-template-columns:1fr 1fr}.event:nth-child(2){border-top:1px solid #eff1ee}.stats{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:680px){.shell{display:block}.sidebar{height:58px;position:sticky;top:0;z-index:15;padding:0 16px;flex-direction:row;align-items:center;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0;font-size:18px}.logo{width:27px;height:27px}.workspace,.navlabel,.nav,.sidebar-bottom{display:none}.topbar{height:auto;min-height:49px;padding:8px 16px;position:static;flex-wrap:wrap;gap:8px}.status{font-size:10px}.content{padding:20px 16px 30px}.welcome{display:block;margin-bottom:18px}.welcome h1{font-size:24px}.date-chip{display:inline-block;margin-top:12px}.stats{gap:9px}.stat{padding:13px}.stat-value{font-size:20px}.workgrid{gap:12px}.card-head{padding:16px}.intake{padding:15px 16px}.result{padding:14px 16px}.feedlist{display:block}.bottomrow{grid-template-columns:1fr;gap:10px}.footer{font-size:8px}.footer span:last-child{display:inline}.voice-actions{width:100%}.voice-btn-primary{width:100%;justify-content:center}.hud-steps{display:none}}
   
@@ -69,6 +88,7 @@
     <div class="navlabel">WORKSPACE</div>
     <nav class="nav">
       <button class="active" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>Overview</button>
+      <button type="button" id="sidebarArBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>AR Card Scanner <span style="margin-left:auto;background:#dcebcf;color:#557647;border-radius:9px;padding:3px 6px;font-size:9px">AR</span></button>
       <button type="button" id="sidebarTourBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="5 3 19 12 5 21 5 3"/></svg>Leadership demo <span style="margin-left:auto;background:#dcebcf;color:#557647;border-radius:9px;padding:3px 6px;font-size:9px">VOICE</span></button>
       <button type="button" data-scroll="intake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>Ops intake</button>
       <button type="button" data-scroll="activity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Activity log</button>
@@ -136,6 +156,7 @@
         <div class="voice-chips-row">
           <span class="voice-chips-label">Say or click:</span>
           <button class="voice-chip" data-vcmd="walkthrough" type="button">🎙️ "Start leadership walkthrough"</button>
+          <button class="voice-chip" data-vcmd="arscan" type="button">📷 "Scan business card"</button>
           <button class="voice-chip" data-vcmd="order" type="button">🎙️ "Process order"</button>
           <button class="voice-chip" data-vcmd="support" type="button">🎙️ "Customer support ticket"</button>
           <button class="voice-chip" data-vcmd="invoice" type="button">🎙️ "Post-invoicing variance"</button>
@@ -156,7 +177,7 @@
         <section class="card" id="intake">
           <div class="card-head"><div><div class="card-title">Quick ops intake</div><div class="card-sub">Drop in an order, support ticket, or invoice. Cortex will take it from here.</div></div><span class="label">RULES ACTIVE</span></div>
           <div class="intake">
-            <div class="samples"><button class="sample" data-sample="order">↳ Try an order</button><button class="sample" data-sample="support">↳ Try a support ticket</button><button class="sample" data-sample="invoice">↳ Try post-invoicing variance</button></div>
+            <div class="samples"><button class="sample" id="arScanBtn" type="button" style="border-color:#aac393;background:#eff7ec;color:#244f2d;font-weight:700">📷 AR Business-Card Scanner</button><button class="sample" data-sample="order">↳ Try an order</button><button class="sample" data-sample="support">↳ Try a support ticket</button><button class="sample" data-sample="invoice">↳ Try post-invoicing variance</button></div>
             <div class="fieldtop"><label for="opsText">PASTE OR SPEAK OPERATIONAL DATA</label><span class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg> Sensitive details masked</span></div>
             <div class="textarea-wrap"><textarea id="opsText" class="input" aria-label="Operational data to process" placeholder="e.g. Fine. Missed disposal. Extra paver pallet. Second skid-steer day. Labor crew-days off. Found out after invoicing."></textarea></div>
             <div class="actionrow"><span class="hint">Private by design · on-device rule evaluation</span><button class="run" id="processBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-3 8h7L9 22l2-9H5l8-11Z"/></svg>Process with Cortex</button></div>
@@ -263,6 +284,70 @@
       <footer class="footer"><span>© 2026 Cortex · Built for teams that are going places.</span><span>Made with care by <strong>Metameta</strong></span></footer>
     </section>
   </main>
+</div>
+
+<!-- AR Business-Card Scanner Interactive Modal -->
+<div class="ar-modal" id="arModal" role="dialog" aria-label="AR Business-Card Scanner">
+  <div class="ar-card">
+    <div class="ar-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="logo" style="width:24px;height:24px;border-radius:7px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:14px"><path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <div>
+          <div style="font:800 14px Manrope,sans-serif;letter-spacing:-.2px">AR Business-Card Scanner</div>
+          <div style="font-size:10px;color:#a3c5b2">Live OCR & On-Device Contact Triage</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="closeArBtn" style="width:28px;height:28px;background:rgba(255,255,255,0.12);border:0;color:#fff" aria-label="Close AR scanner">✕</button>
+    </div>
+
+    <div class="ar-viewport">
+      <video id="arVideo" playsinline autoplay muted style="width:100%;height:100%;object-fit:cover;display:none"></video>
+      <div class="ar-reticle" id="arReticle">
+        <div class="ar-corner ar-c-tl"></div>
+        <div class="ar-corner ar-c-tr"></div>
+        <div class="ar-corner ar-c-bl"></div>
+        <div class="ar-corner ar-c-br"></div>
+        <div class="ar-laser"></div>
+        <div class="ar-card-preview" id="arCardPreview">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <div id="arCardCompany" style="font:800 12px Manrope,sans-serif;letter-spacing:-.2px;color:var(--green)">APEX LOGISTICS & HAULING</div>
+              <div id="arCardName" style="font-size:11px;font-weight:700;margin-top:2px">Elena Rostova</div>
+              <div id="arCardTitle" style="font-size:9px;color:#b6d8c4">Director of Field Supply</div>
+            </div>
+            <span style="font:700 8px 'DM Mono',monospace;background:rgba(185,239,134,0.2);color:var(--green);padding:2px 5px;border-radius:4px">OCR ANCHOR</span>
+          </div>
+          <div style="font:9px 'DM Mono',monospace;line-height:1.5;color:#e1eee6">
+            <div id="arCardPhone">TEL: +1 (512) 890-4421</div>
+            <div id="arCardEmail">EMAIL: elena@apexhauling.com</div>
+            <div id="arCardAddress">HQ: 1804 Industrial Blvd, Austin TX 78744</div>
+          </div>
+        </div>
+      </div>
+      <div class="ar-telemetry">
+        <span id="arOcrStatus">OCR: BOUNDING BOXES LOCKED</span>
+        <span>CONFIDENCE: 98.7%</span>
+        <span>LATENCY: 42ms</span>
+      </div>
+    </div>
+
+    <div class="ar-controls">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="sample" data-arcard="apex" type="button" style="background:#1b4234;color:#fff;border-color:#356754">🎴 Apex Logistics</button>
+          <button class="sample" data-arcard="pavers" type="button" style="background:#1b4234;color:#fff;border-color:#356754">🎴 Lone Star Pavers</button>
+          <button class="sample" data-arcard="nuwave" type="button" style="background:#1b4234;color:#fff;border-color:#356754">🎴 NuWave Health</button>
+        </div>
+        <button class="sample" id="toggleCameraBtn" type="button" style="background:rgba(255,255,255,0.08);color:#d5e8dc;border-color:rgba(255,255,255,0.15)">📷 Toggle Device Camera</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px">
+        <span style="font-size:11px;color:#a1c4b0">Align card in optical reticle to ingest into Cortex.</span>
+        <button class="voice-btn-primary" id="captureArCardBtn" type="button" style="padding:10px 18px;font-size:12px">
+          ⚡ Capture & Triage with Cortex
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Leadership Walkthrough Player HUD -->
@@ -549,6 +634,8 @@
      runVoiceAction('invoice');
    }else if(s.includes('forecast') || s.includes('demand') || s.includes('outlook')){
      runVoiceAction('forecast');
+   }else if(s.includes('scan') || s.includes('business card') || s.includes('card') || s.includes('camera') || s.includes('ar scanner')){
+     runVoiceAction('arscan');
    }else if(s.includes('testimonial') || s.includes('blockchain') || s.includes('review') || s.includes('proof') || s.includes('ledger') || s.includes('on-chain')){
      runVoiceAction('testimonials');
    }else if(s.includes('clear') || s.includes('reset')){
@@ -571,6 +658,10 @@
      const msg = 'Demand outlook: Daily Greens orders trending up 22% next week. Buffer stock recommended.';
      toast(msg);
      speak(msg);
+     return;
+   }
+   if(kind === 'arscan'){
+     openArScanner();
      return;
    }
    if(kind === 'testimonials'){
@@ -730,6 +821,112 @@
    }
  }
 
+ 
+ /* ==========================================================================
+    AR BUSINESS-CARD SCANNER ENGINE
+    ========================================================================== */
+ const arCards = {
+   apex: {
+     company: 'APEX LOGISTICS & HAULING',
+     name: 'Elena Rostova',
+     title: 'Director of Field Supply',
+     phone: '+1 (512) 890-4421',
+     email: 'elena@apexhauling.com',
+     address: '1804 Industrial Blvd, Austin TX 78744',
+     raw: 'Business Card: Elena Rostova (Director of Field Supply) — APEX LOGISTICS & HAULING. Phone: 512-890-4421, Email: elena@apexhauling.com. Address: 1804 Industrial Blvd, Austin TX. Direct quote for dedicated pallet delivery and freight dispatch.'
+   },
+   pavers: {
+     company: 'LONE STAR PAVERS & SUPPLY',
+     name: 'Daryl Jenkins',
+     title: 'Senior Project Estimator',
+     phone: '+1 (512) 671-8890',
+     email: 'daryl@lonestarpavers.com',
+     address: '920 Quarry Way, Round Rock TX 78664',
+     raw: 'Business Card: Daryl Jenkins (Senior Estimator) — LONE STAR PAVERS & SUPPLY. Phone: 512-671-8890, Email: daryl@lonestarpavers.com. Missed disposal fee adjustment & skid-steer daily rental credit for job site invoice reconciliation.'
+   },
+   nuwave: {
+     company: 'NUWAVE CONSUMER HEALTH',
+     name: 'Claire Beauchamp',
+     title: 'VP Brand Partnerships',
+     phone: '+1 (415) 332-9012',
+     email: 'claire@nuwavehealth.co',
+     address: '450 Mission St, San Francisco CA 94105',
+     raw: 'Business Card: Claire Beauchamp (VP Brand Partnerships) — NUWAVE CONSUMER HEALTH. Email: claire@nuwavehealth.co. Order inquiry for 500 Daily Greens retail trial packs and expedited distribution.'
+   }
+ };
+
+ let currentArKey = 'apex';
+ let cameraStream = null;
+
+ function openArScanner(){
+   $('#arModal').classList.add('show');
+   selectArCard(currentArKey);
+   toast('AR Business-Card Scanner active');
+   speak('AR Business Card Scanner active. Align card in optical reticle or pick a sample card.');
+ }
+
+ function closeArScanner(){
+   $('#arModal').classList.remove('show');
+   if(cameraStream){
+     cameraStream.getTracks().forEach(t => t.stop());
+     cameraStream = null;
+     $('#arVideo').style.display = 'none';
+     $('#arCardPreview').style.display = 'flex';
+   }
+ }
+
+ function selectArCard(key){
+   currentArKey = key;
+   const c = arCards[key];
+   if(!c) return;
+   $('#arCardCompany').textContent = c.company;
+   $('#arCardName').textContent = c.name;
+   $('#arCardTitle').textContent = c.title;
+   $('#arCardPhone').textContent = 'TEL: ' + c.phone;
+   $('#arCardEmail').textContent = 'EMAIL: ' + c.email;
+   $('#arCardAddress').textContent = 'HQ: ' + c.address;
+   $('#arOcrStatus').textContent = `OCR: ANCHORED ON ${c.name.toUpperCase()}`;
+ }
+
+ async function toggleCamera(){
+   if(cameraStream){
+     cameraStream.getTracks().forEach(t => t.stop());
+     cameraStream = null;
+     $('#arVideo').style.display = 'none';
+     $('#arCardPreview').style.display = 'flex';
+     $('#toggleCameraBtn').textContent = '📷 Open Device Camera';
+     toast('Switched to simulated AR card');
+     return;
+   }
+   try{
+     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+       toast('Camera API not available in this browser context. Using simulated AR card.');
+       return;
+     }
+     cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+     const video = $('#arVideo');
+     video.srcObject = cameraStream;
+     video.style.display = 'block';
+     $('#arCardPreview').style.display = 'none';
+     $('#toggleCameraBtn').textContent = '🎴 Use Sample Card';
+     toast('Device camera connected to AR reticle');
+   }catch(err){
+     toast('Camera access unavailable. Using interactive sample card.');
+   }
+ }
+
+ function captureArCard(){
+   const card = arCards[currentArKey];
+   closeArScanner();
+   textarea.value = card.raw;
+   textarea.focus();
+   const res = process();
+   highlightElement(result);
+   const speakText = `AR card scanned: ${card.name} from ${card.company} ingested into operations desk.`;
+   toast(`⚡ AR Card Parsed: ${card.name} · ${card.company}`);
+   speak(speakText);
+ }
+
  /* ==========================================================================
     EVENT LISTENERS & BINDINGS
     ========================================================================== */
@@ -764,6 +961,17 @@
  $('#topbarWalkthroughBtn').addEventListener('click',startWalkthrough);
  $('#sidebarTourBtn').addEventListener('click',startWalkthrough);
  $('#launchTourBtn').addEventListener('click',startWalkthrough);
+
+ // AR Scanner Bindings
+ $('#arScanBtn')?.addEventListener('click', openArScanner);
+ $('#sidebarArBtn')?.addEventListener('click', openArScanner);
+ $('#closeArBtn')?.addEventListener('click', closeArScanner);
+ $('#toggleCameraBtn')?.addEventListener('click', toggleCamera);
+ $('#captureArCardBtn')?.addEventListener('click', captureArCard);
+ document.querySelectorAll('[data-arcard]').forEach(b => {
+   b.addEventListener('click', () => selectArCard(b.dataset.arcard));
+ });
+
 
  document.querySelectorAll('[data-vcmd]').forEach(btn => {
    btn.addEventListener('click', () => {
