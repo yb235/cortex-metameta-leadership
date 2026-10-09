@@ -1,6 +1,33 @@
 # Cortex — Metameta
 
-Complete static hackathon app. No build step, backend, or API keys required.
+Complete static hackathon app for lean D2C teams to triage orders, support, and invoices with autonomous AI triage. No build step, backend, or API keys required.
+
+## Public Deployment
+
+- **Live Showcase URL (GitHub Pages)**: [https://yb235.github.io/cortex-metameta-leadership/](https://yb235.github.io/cortex-metameta-leadership/)
+- **Direct Leadership Voice Walkthrough**: [https://yb235.github.io/cortex-metameta-leadership/?walkthrough=1](https://yb235.github.io/cortex-metameta-leadership/?walkthrough=1)
+- **Live Tunnel (Cloudflare)**: [https://frankfurt-tba-surge-advertise.trycloudflare.com](https://frankfurt-tba-surge-advertise.trycloudflare.com)
+- **GitHub Repository**: [https://github.com/yb235/cortex-metameta-leadership](https://github.com/yb235/cortex-metameta-leadership)
+
+## Features & Leadership Voice Walkthrough Mode
+
+1. **Voice-Controlled Demo Mode**:
+   - Hands-free microphone listening via Web Speech API (`SpeechRecognition`).
+   - Natural voice commands: `"Process order"`, `"Customer support ticket"`, `"Review invoice"`, `"Demand forecast"`, `"Clear demo log"`, and `"Start leadership walkthrough"`.
+   - On-device speech dictation: speak any operational text to transcribe directly into the ops intake queue.
+   - Interactive one-click voice prompt chips for simulated voice testing without microphone requirements.
+
+2. **Guided Leadership Walkthrough HUD**:
+   - 5-step executive tour highlighting operational ROI, zero-latency processing, on-device PII masking, churn risk escalation, and spend approval thresholds.
+   - Real-time speech synthesis (`SpeechSynthesis`) with natural executive narration and synchronized captions.
+   - Full playback controls: Step forward/back, Pause/Resume, Sound mute/unmute, and Step dot selector.
+   - Deep-linkable via `/?walkthrough=1` or `/?demo=leadership`.
+
+3. **Core Operations Triage & Privacy**:
+   - Real-time classification into Order Fulfillment, Support Care, or Accounts Payable.
+   - On-device pattern-based masking of addresses, phones, and emails.
+   - Persistent append-only activity audit log stored in browser `localStorage`.
+   - Starter Plan ($99/mo) with self-serve demo signup at `/signup`.
 
 ## Run locally
 
@@ -9,44 +36,3 @@ Unzip, enter the cortex-metameta folder, and run:
     python3 -m http.server 8000
 
 Open http://localhost:8000/ in your browser.
-
-## Pages
-
-- `/` — operations intake and timestamped activity log
-- `/pricing` and `/plans` — Starter plan, $99/month
-- `/share` — internal team overview, personalized sample link, copyable introduction
-- `/signup` — signup form and Account created confirmation
-
-The full source (HTML, CSS, JavaScript) is in index.html. The route folders contain
-copies for static hosts that do not provide a single-page-app fallback. After
-editing index.html, copy it to pricing/index.html, plans/index.html, signup/index.html, and share/index.html before publishing.
-
-## Public deployment
-
-https://cortex-ops-desk.openagent-la-3602.chatgpt.site
-
-Deploy this folder to any static host. No environment variables are needed.
-
-## Demo behavior
-
-- Intake uses deterministic keyword rules.
-- Submitted text (with pattern-based masking), category, next action, and event
-  time are recorded in browser localStorage. The latest six entries are shown.
-- Signup saves a demo account profile in browser localStorage. Passwords are not
-  stored. No email is sent and no payment is collected.
-- KPI and demand forecast panels contain illustrative sample values.
-- This is a local-browser demo, not production authentication or a tamper-proof
-  compliance system. Pattern-based masking is not exhaustive.
-- Font styling may use Google Fonts; system font fallbacks work without it.
-
-## Revision
-
-2026-10-09, source 616ff8806ec691a3a1804b5f86696f1448d8d5a8.
-Includes submitted-item log fix, visible Metameta branding on mobile and desktop,
-Starter pricing, and self-serve demo signup.
-
-Checks: JavaScript syntax; execution of /pricing, /plans, /signup and /signup/;
-signup confirmation, saved profile, and no password persistence. These were
-programmatic checks, not a browser visual review.
-
-Internal-sharing update: /share supports audience and workflow choices, a copyable link and introduction, and no-signup sample demos via /?demo=order, support, or invoice. Budget, owner, and timeline are not assumed. Programmatic checks cover personalized links, copy callbacks, and processing/logging all three samples.
