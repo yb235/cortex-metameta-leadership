@@ -137,7 +137,7 @@
           <button class="voice-chip" data-vcmd="walkthrough" type="button">🎙️ "Start leadership walkthrough"</button>
           <button class="voice-chip" data-vcmd="order" type="button">🎙️ "Process order"</button>
           <button class="voice-chip" data-vcmd="support" type="button">🎙️ "Customer support ticket"</button>
-          <button class="voice-chip" data-vcmd="invoice" type="button">🎙️ "Review invoice"</button>
+          <button class="voice-chip" data-vcmd="invoice" type="button">🎙️ "Post-invoicing variance"</button>
           <button class="voice-chip" data-vcmd="forecast" type="button">🎙️ "Demand forecast"</button>
           <button class="voice-chip" data-vcmd="clear" type="button">🎙️ "Clear demo log"</button>
         </div>
@@ -154,9 +154,9 @@
         <section class="card" id="intake">
           <div class="card-head"><div><div class="card-title">Quick ops intake</div><div class="card-sub">Drop in an order, support ticket, or invoice. Cortex will take it from here.</div></div><span class="label">RULES ACTIVE</span></div>
           <div class="intake">
-            <div class="samples"><button class="sample" data-sample="order">↳ Try an order</button><button class="sample" data-sample="support">↳ Try a support ticket</button><button class="sample" data-sample="invoice">↳ Try an invoice</button></div>
+            <div class="samples"><button class="sample" data-sample="order">↳ Try an order</button><button class="sample" data-sample="support">↳ Try a support ticket</button><button class="sample" data-sample="invoice">↳ Try post-invoicing variance</button></div>
             <div class="fieldtop"><label for="opsText">PASTE OR SPEAK OPERATIONAL DATA</label><span class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg> Sensitive details masked</span></div>
-            <div class="textarea-wrap"><textarea id="opsText" class="input" aria-label="Operational data to process" placeholder="e.g. Order #BS-2841 — 2x Daily Greens, customer says package hasn't arrived. Ship to 1421 Willow Creek Rd, Austin TX 78704. Paid $78.00. (Or speak via mic...)"></textarea></div>
+            <div class="textarea-wrap"><textarea id="opsText" class="input" aria-label="Operational data to process" placeholder="e.g. Fine. Missed disposal. Extra paver pallet. Second skid-steer day. Labor crew-days off. Found out after invoicing."></textarea></div>
             <div class="actionrow"><span class="hint">Private by design · on-device rule evaluation</span><button class="run" id="processBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-3 8h7L9 22l2-9H5l8-11Z"/></svg>Process with Cortex</button></div>
           </div>
           <div class="result" id="result" aria-live="polite"></div>
@@ -216,7 +216,9 @@
 
 <script>
 (()=>{
- const route=location.pathname.replace(/\/+$/,'')||'/';
+ const BASE=/^\/cortex-metameta-leadership(?=\/|$)/.test(location.pathname)?'/cortex-metameta-leadership':'';
+ const fixRootLinks=()=>document.querySelectorAll('a[href^="/"]').forEach(a=>{const h=a.getAttribute('href');if(!h.startsWith(BASE))a.setAttribute('href',BASE+h)});
+ const route=(BASE?location.pathname.slice(BASE.length):location.pathname).replace(/\/+$/,'')||'/';
  if(['/pricing','/plans','/signup','/share'].includes(route)){
    const logo='<a class="route-logo" href="/"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 15.5 10 5l4.2 8.2L18 5l2 4"/><path d="M4 19h16"/></svg></span>Cortex <small>by Metameta</small></a>';
    const nav='<header class="route-nav">'+logo+'<nav class="route-links"><a class="navlink" href="/">Dashboard</a><a class="navlink" href="/?walkthrough=1">Voice Walkthrough</a><a class="navlink" href="/share">Share with team</a><a class="navlink" href="/plans">Plans</a><a class="price-cta" style="margin:0;padding:9px 12px" href="/signup">Create account</a></nav></header>';
@@ -233,8 +235,8 @@
        const isLead = audience.value==='founder' || workflow.value==='leadership';
        const who={unsure:'our team',operations:'our operations team',support:'our support team',finance:'our finance team',founder:'our leadership team'}[audience.value]||'our team';
        const task={order:'order triage',support:'support ticket routing',invoice:'invoice review',leadership:'the voice-controlled leadership walkthrough'}[workflow.value]||'order triage';
-       shareUrl = location.origin + (isLead ? '/?walkthrough=1' : ('/share?audience='+encodeURIComponent(audience.value)+'&sample='+encodeURIComponent(workflow.value)));
-       document.getElementById('teamDemo').href = isLead ? '/?walkthrough=1' : ('/?demo='+encodeURIComponent(workflow.value));
+       shareUrl = location.origin + BASE + (isLead ? '/?walkthrough=1' : ('/share?audience='+encodeURIComponent(audience.value)+'&sample='+encodeURIComponent(workflow.value)));
+       document.getElementById('teamDemo').href = BASE + (isLead ? '/?walkthrough=1' : '/?demo='+encodeURIComponent(workflow.value));
        brief.value = isLead ?
          `Hi team,\n\nI tested the Cortex showcase with the new Voice-Controlled Demo Mode built for our leadership walkthrough. It features hands-free voice command routing, PII masking, and real-time operations triage. Take a quick look here:\n\n${shareUrl}` :
          `I found a quick Cortex demo that might be useful for ${who}. It shows ${task}, a suggested next action, and an activity log. Could you try one example and tell me whether it would help with work we repeat today? No signup is needed to explore.\n\n${shareUrl}`;
@@ -250,13 +252,14 @@
      document.body.innerHTML='<main class="route-page">'+nav+'<section class="signup-wrap"><article class="signup-card"><div class="route-kicker">STARTER · $99 / MONTH</div><h1>Create your workspace</h1><p class="signup-copy">Set up Cortex for your team. No card is needed to explore this demo.</p><div class="signup-plan"><span><strong>Starter</strong><br><span style="color:#7b897f">2,000 ops · up to 10 teammates</span></span><strong>$99/mo</strong></div><form class="signup-form" id="signupForm"><div class="form-field"><label for="signupName">YOUR NAME</label><input id="signupName" name="name" autocomplete="name" required placeholder="Dev Patel"></div><div class="form-field"><label for="signupEmail">WORK EMAIL</label><input id="signupEmail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div><div class="form-field"><label for="signupCompany">COMPANY</label><input id="signupCompany" name="company" autocomplete="organization" required placeholder="Brightseed"></div><div class="form-field"><label for="signupPassword">PASSWORD</label><input id="signupPassword" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters"></div><div class="route-error" id="signupError"></div><button class="signup-submit" type="submit">Create account</button><p class="fineprint">Demo signup saves a workspace profile in this browser; no payment is collected.</p></form><div class="success-box" id="signupSuccess" role="status" aria-live="polite"><div class="success-title">✓ Account created</div><div class="success-copy" id="successCopy">Your Cortex Starter workspace is ready.</div><a class="success-go" href="/">Open Cortex</a></div><a class="signup-back" href="/plans">← Back to plans</a></article></section>'+foot+'</main>';
      document.getElementById('signupForm').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget;if(!form.reportValidity())return;const data=new FormData(form);const account={name:String(data.get('name')).trim(),email:String(data.get('email')).trim(),company:String(data.get('company')).trim(),plan:'Starter',price:'$99/month',createdAt:new Date().toISOString()};try{localStorage.setItem('cortex-demo-account',JSON.stringify(account))}catch{const error=document.getElementById('signupError');error.style.display='block';error.textContent='Browser storage is unavailable. Please enable it and try again.';return}document.getElementById('signupSuccess').classList.add('show');document.getElementById('successCopy').textContent='Your Cortex Starter account for '+account.company+' is created and saved in this browser. Registered email: '+account.email+'.';form.classList.add('hidden')});
    }
+   if(BASE)fixRootLinks();
    return;
  }
 
  const samples={
    order:'Order #BS-2841 — 2x Daily Greens, customer says package hasn’t arrived. Ship to 1421 Willow Creek Rd, Austin TX 78704. Paid $78.00.',
    support:'Ticket #SUP-1092 — I started taking Daily Greens last week and my subscription renewed before I meant it to. Can you cancel the next shipment? Email: maya@example.com',
-   invoice:'Invoice INV-883 — Lone Star Fulfillment, $2,450.00 due Oct 14, 2026. Please confirm receipt and route for approval.'
+   invoice:'Fine. Missed disposal. Extra paver pallet. Second skid-steer day. Labor crew-days off. Found out after invoicing.'
  };
 
  const $=s=>document.querySelector(s), textarea=$('#opsText'), result=$('#result'), feed=$('#feedList');
@@ -283,7 +286,9 @@
  function classify(text){
    const s=text.toLowerCase();
    let category='Order',title='Order · Fulfillment',action='Confirm inventory, then release this order to the pick-and-pack queue.',priority='Standard',needsHuman=false;
-   if(/invoice|inv[- #]|\bdue\b|\$[\d,]+(?:\.\d\d)?\s*(?:due|net)/i.test(text)){
+   if(/disposal|paver|skid-steer|crew-days?|after invoicing/i.test(s)){
+     category='Invoice';title='Invoice · Post-billing variance & job costing';action='Audit unbilled field expenses (missed disposal, paver pallets, skid-steer rental, labor crew variance). Hold vendor reconciliation and route to founder to issue change order or adjust margin.';priority='Cost variance';needsHuman=true;
+   }else if(/invoice|inv[- #]|\bdue\b|\$[\d,]+(?:\.\d\d)?\s*(?:due|net)/i.test(text)){
      category='Invoice';title='Invoice · Accounts payable';action='Match against the purchase order, then send to the founder for approval before the due date.';priority='Approval required';needsHuman=true;
    }else if(/ticket|refund|cancel|subscription|customer says|support|complaint|charged|where is my|haven.t arrived/i.test(text)){
      category='Support';title='Support · Customer care';action='Check the carrier scan and reply with the latest delivery status. Escalate if no scan update in 24 hours.';priority='Reply suggested';
@@ -453,7 +458,7 @@
      runVoiceAction('order');
    }else if(s.includes('support') || s.includes('ticket') || s.includes('refund') || s.includes('cancel')){
      runVoiceAction('support');
-   }else if(s.includes('invoice') || s.includes('bill') || s.includes('pay') || s.includes('accounting')){
+   }else if(s.includes('invoice') || s.includes('bill') || s.includes('pay') || s.includes('accounting') || s.includes('disposal') || s.includes('paver') || s.includes('skid') || s.includes('variance')){
      runVoiceAction('invoice');
    }else if(s.includes('forecast') || s.includes('demand') || s.includes('outlook')){
      runVoiceAction('forecast');
@@ -545,8 +550,8 @@
    },
    {
      num: 4,
-     name: '4. Accounts Payable & Spend Control',
-     text: 'Step four: Financial spend controls. For vendor invoices exceeding one thousand dollars, Cortex flags the approval threshold and routes to the founder before payment, eliminating billing errors.',
+     name: '4. Post-Invoicing Cost Variance & Job Costing',
+     text: 'Step four: Post-invoicing cost protection. When surprise field expenses like missed disposal fees, extra paver pallets, skid-steer days, or crew labor variances are discovered after billing, Cortex flags the variance for founder review to issue a change order and preserve profit margins.',
      target: '#result',
      action: () => {
        textarea.value = samples.invoice;
@@ -686,6 +691,7 @@
  const reqDemo = urlParams.get('demo');
  const isWalkthrough = urlParams.get('walkthrough') || urlParams.get('voice');
 
+ if(BASE)fixRootLinks();
  if(isWalkthrough || reqDemo === 'leadership'){
    setTimeout(startWalkthrough, 700);
  } else if(Object.prototype.hasOwnProperty.call(samples, reqDemo)){
